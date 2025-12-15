@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Corner the Blue – C# WinForms French Strategy Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Corner the Blue – a small French abstract strategy game implemented in C# and Windows Forms. Three red pieces try to trap a single blue piece before it slips past their line."
+  />
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    body {
+      margin: 0;
+      background: #0f172a;
+      color: #e5e7eb;
+      display: flex;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .page {
+      max-width: 900px;
+      width: 100%;
+      background: #020617;
+      border-radius: 1.5rem;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+    }
+
+    h1 {
+      font-size: clamp(2.1rem, 4vw, 2.7rem);
+      margin: 0 0 0.5rem;
+      letter-spacing: 0.04em;
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      margin-top: 2rem;
+      margin-bottom: 0.4rem;
+    }
+
+    p {
+      margin: 0.35rem 0;
+      color: #cbd5f5;
+    }
+
+    .tagline {
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #38bdf8;
+      margin-bottom: 0.75rem;
+    }
+
+    .subtitle {
+      font-size: 0.98rem;
+      color: #9ca3af;
+      margin-bottom: 0.5rem;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 0.75rem 0 1.25rem;
+    }
+
+    .pill {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      padding: 0.3rem 0.8rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      color: #e5e7eb;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 2rem;
+      align-items: center;
+      margin-top: 1.5rem;
+    }
+
+    @media (max-width: 720px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .hero-text p {
+      font-size: 0.98rem;
+    }
+
+    .hero-board {
+      background: radial-gradient(circle at top, #1f2937 0, #020617 55%);
+      border-radius: 1.25rem;
+      padding: 1.5rem 1.25rem;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-board::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.17), transparent 60%),
+        radial-gradient(circle at 100% 100%, rgba(248, 113, 113, 0.17), transparent 55%);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .board-inner {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      border-radius: 0.75rem;
+      background: #020617;
+      border: 1px solid rgba(148, 163, 184, 0.85);
+      display: grid;
+      place-items: center;
+      padding: 0.75rem;
+    }
+
+    .grid {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .grid-lines {
+      position: absolute;
+      inset: 18%;
+      border-radius: 0.6rem;
+      border: 2px solid rgba(148, 163, 184, 0.9);
+    }
+
+    .grid-lines::before,
+    .grid-lines::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-top: 2px solid rgba(148, 163, 184, 0.9);
+      border-bottom: 2px solid rgba(148, 163, 184, 0.9);
+      top: 33.33%;
+      bottom: 33.33%;
+    }
+
+    .grid-lines::after {
+      border-top: none;
+      border-bottom: 2px solid rgba(148, 163, 184, 0.9);
+      top: 66.66%;
+    }
+
+    .piece {
+      position: absolute;
+      width: 15%;
+      aspect-ratio: 1 / 1;
+      border-radius: 999px;
+      border: 2px solid #020617;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.7);
+      display: grid;
+      place-items: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .piece-red {
+      background: #f97373;
+    }
+
+    .piece-blue {
+      background: #38bdf8;
+    }
+
+    .piece-red:nth-child(1) { top: 12%; left: 22%; }
+    .piece-red:nth-child(2) { top: 12%; left: 50%; }
+    .piece-red:nth-child(3) { top: 12%; left: 78%; }
+
+    .piece-blue { bottom: 12%; left: 50%; }
+
+    .label {
+      margin-top: 0.75rem;
+      font-size: 0.8rem;
+      color: #9ca3af;
+      text-align: center;
+    }
+
+    .columns {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.75rem;
+    }
+
+    .card {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 1rem;
+      padding: 1.25rem 1.2rem 1.35rem;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 0.4rem;
+      font-size: 1rem;
+      color: #e5e7eb;
+    }
+
+    .card ul {
+      margin: 0.3rem 0 0;
+      padding-left: 1.1rem;
+      font-size: 0.94rem;
+      color: #cbd5f5;
+    }
+
+    .card ul li {
+      margin: 0.2rem 0;
+    }
+
+    a.button-main {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.7rem 1.25rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-top: 1.35rem;
+      background: linear-gradient(135deg, #38bdf8, #f97373);
+      color: #020617;
+      border: none;
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.7);
+    }
+
+    a.button-main span {
+      font-size: 1.1rem;
+    }
+
+    .footer {
+      margin-top: 2.25rem;
+      font-size: 0.8rem;
+      color: #6b7280;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="tagline">Two-player abstract strategy · asymmetrical chase game</div>
+    <h1>Corner the Blue</h1>
+    <p class="subtitle">A small French abstract strategy game implemented in C# and Windows Forms.</p>
+    <p>
+      <strong>Three red pieces versus one blue piece.</strong>
+      Trap the blue in a corner before it slips past your line and escapes.
+    </p>
+
+    <div class="pill-row">
+      <div class="pill">French Military Game inspired</div>
+      <div class="pill">C# · Windows Forms</div>
+      <div class="pill">No randomness</div>
+      <div class="pill">Quick games</div>
+      <div class="pill">Easy rules</div>
+    </div>
+
+    <section class="hero">
+      <div class="hero-text">
+        <p>
+          <em>Corner the Blue</em> is a minimalist implementation of a traditional French hunt game:
+          three slower pieces advance together to block a single, more agile runner.
+        </p>
+        <p>
+          The red side controls three pieces that can move one step forward or sideways, but never
+          backward. The blue side controls a single piece that can move one step in any direction.
+          Red wins by completely blocking the blue piece so it has no legal moves. Blue wins the
+          moment it passes <strong>below</strong> all red pieces and breaks through the line.
+        </p>
+        <a class="button-main" href="YOUR_GITHUB_REPO_URL" target="_blank" rel="noopener">
+          <span>↗</span> View source on GitHub
+        </a>
+      </div>
+
+      <div class="hero-board">
+        <div class="board-inner">
+          <div class="grid">
+            <div class="grid-lines"></div>
+            <div class="piece piece-red">R</div>
+            <div class="piece piece-red">R</div>
+            <div class="piece piece-red">R</div>
+            <div class="piece piece-blue">B</div>
+          </div>
+        </div>
+        <div class="label">
+          Desktop implementation in C# / .NET Windows Forms · three red tokens advancing against one blue runner.
+        </div>
+      </div>
+    </section>
+
+    <section class="columns">
+      <div class="card">
+        <h3>Rules at a glance</h3>
+        <ul>
+          <li>Two players: <strong>Red (3 pieces)</strong> vs <strong>Blue (1 piece)</strong>.</li>
+          <li>Red moves first; players alternate turns.</li>
+          <li>Red pieces move one step forward or sideways, never backwards.</li>
+          <li>The blue piece moves one step in any direction.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>How to win</h3>
+        <ul>
+          <li><strong>Red wins</strong> by trapping the blue piece so it has no legal moves.</li>
+          <li><strong>Blue wins</strong> by moving to a position below all red pieces (breaking through the line).</li>
+          <li>No captures, no luck – just pure positional play.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Implementation</h3>
+        <ul>
+          <li>Implemented in <strong>C#</strong> on <strong>.NET Windows Forms</strong>.</li>
+          <li>Board drawn with standard WinForms painting (GDI+).</li>
+          <li>Mouse input for selecting and moving pieces.</li>
+          <li>Compact game logic: great as a learning project or AI testbed.</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="footer">
+      Corner the Blue – a small French abstract strategy game implemented in C# and Windows Forms.
+      Inspired by traditional hare games such as the French Military Game (“Hare and Hounds”).
+    </div>
+  </main>
+</body>
+</html>
