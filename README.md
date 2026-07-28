@@ -160,7 +160,7 @@ Because the logic is compact and self-contained, this project can be:
 ---
 ### AI / Move selection algorithm
 
-For another board game project (Renzu) I used a classic minimax search with an evaluation function in the range 0–1.  
+For another board game project (Rendzu) I used a classic minimax search with an evaluation function in the range 0–1.  
 For **Corner the Blue** the AI uses a different approach that is better suited to this small, highly tactical game.
 
 Here the evaluation is essentially binary: every position is treated as either a win (1) or a loss (0) for the side to move.
