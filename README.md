@@ -1,6 +1,6 @@
 # Corner the Blue
 
-*A small French abstract strategy game implemented in C++ and Windows Forms.*
+*A small French abstract strategy game implemented in native C++ (Win32/MFC).*
 
 **Corner the Blue** is a minimalist two-player abstract strategy game inspired by traditional French “hare games” (also known as the **French Military Game / Hare and Hounds**).  
 
@@ -18,12 +18,12 @@ There is **no randomness** and **no hidden information** – every game is decid
   - Blue: one piece  
 - **Genre:** Asymmetrical abstract strategy (“hunt game”)  
 - **Platform:** Desktop  
-- **Tech stack:** C# (.NET) + Windows Forms  
+- **Tech stack:** C++ (Win32/MFC, GDI+ rendering)  
 - **Goal:**  
   - Red tries to trap the blue piece so it cannot move.  
   - Blue tries to slip past the red line and reach the area “below” all red pieces.
 
-This project is designed as a **small, readable example** of a turn-based board game implemented in classic WinForms. It can also be used as a testbed for simple AI or search algorithms.
+This project is designed as a **small, readable example** of a turn-based board game implemented with classic Win32/MFC. It can also be used as a testbed for simple AI or search algorithms.
 
 ---
 
@@ -95,8 +95,8 @@ Because red pieces are not allowed to move backward, they can no longer rebuild 
 
 1. **Start the application**
 
-   - Build and run the project in Visual Studio (or your preferred C# IDE).
-   - A classic Windows Forms window with the game board will appear.
+   - Build and run the project in Visual Studio (or your preferred C++ IDE).
+   - A classic Windows desktop window with the game board will appear.
 
 2. **Selecting and moving pieces**
 
@@ -135,15 +135,15 @@ Because red pieces are not allowed to move backward, they can no longer rebuild 
 
 ---
 
-## Implementation (C# / Windows Forms)
+## Implementation (native C++ — Win32/MFC, GDI+ rendering)
 
-This digital version of **Corner the Blue** is implemented as a classic desktop application using **C#** and **.NET Windows Forms**.
+This digital version of **Corner the Blue** is implemented as a classic desktop application using **C++** and **MFC**.
 
 Key technical points:
 
-- The board is drawn using standard **Windows Forms painting (GDI+)**.
+- The board is drawn using **GDI+**.
 - **Mouse events** are used to select and move pieces on the board.
-- Game state is stored in simple C# classes, e.g.:
+- Game state is stored in simple C++ classes, e.g.:
   - board representation (connections / coordinates),
   - piece positions and current player,
   - legal move generation and win-condition checks.
@@ -153,7 +153,7 @@ Key technical points:
 
 Because the logic is compact and self-contained, this project can be:
 
-- a **learning example** for beginners in C# and Windows Forms,
+- a **learning example** for beginners in C++ (Win32/MFC, GDI+ rendering),
 - a **starting point** for AI experiments (search trees, evaluation functions), or
 - the basis for a port to other frameworks (WPF, Unity, web front-end, etc.).
 
@@ -192,3 +192,8 @@ Screenshots are included in this repository:
 
 > For a more detailed description (including formatted rules and captions),
 > see the accompanying **Word / PDF description** in this repository.
+
+---
+
+## Author
+Rafael M. — Software Developer
